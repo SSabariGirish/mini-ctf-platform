@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome - Mini CTF</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Mini-CTF Platform</h1>
+    
+    {% if current_user.is_authenticated %}
+        <p>Hello, {{ current_user.username }}!</p>
+        <p>Your score: {{ current_user.score }}</p>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <p>Please <a href="{{ url_for('login') }}">log in</a> or <a href="{{ url_for('register') }}">register</a> to play.</p>
+    {% endif %}
+    
+    <hr>
+    
+    <h3>Submit a Flag</h3>
+    <form method="POST" action="{{ url_for('submit_flag') }}">
+        <label for="flag">Flag:</label>
+        <input type="text" id="flag" name="flag" placeholder="flag{...}" required>
+        <button type="submit">Submit</button>
+    </form>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <hr>
+    <h2>Challenges</h2>
+    
+    {% if current_user.is_authenticated %}
+    <ul>
+        <li>
+            <a href="{{ url_for('search') }}">Challenge 1: The "Search" Page (Easy)</a>
+
+        </li>
+        </ul>
+    {% else %}
+    <p>Log in to see the challenges.</p>
+    {% endif %}
+</body>
+</html>

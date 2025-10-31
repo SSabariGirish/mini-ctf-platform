@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">  
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <a href="{{ url_for('index') }}"><< Back to Dashboard</a>
+    <h2>Challenge 1: The "Search" Page</h2>
+    <p>Use the search bar to find... something. Maybe a cookie?</p>
+
+    <form method="GET" action="/search">
+        <label for="q">Search:</label>
+        <input type="text" id="q" name="q">
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+    <h3>Search Results</h3>
+    {% if search_query %}
+        <p>
+            Showing results for: <strong>{{ search_query | safe }}</strong>
+        </p>
+    {% else %}
+        <p>Enter a search term to begin.</p>
+    {% endif %}
+
+</body>
+</html>
