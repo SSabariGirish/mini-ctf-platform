@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, mak
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 # Load environment variables from .env
 load_dotenv()
@@ -16,6 +17,14 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a_default_fallback_key')
 # Configure the database location
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ctf.db')
+app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static', 'uploads')
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    """Checks if a filename has an allowed extension"""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # --- 2. Database & Login Setup ---
 db = SQLAlchemy(app)
@@ -261,6 +270,48 @@ def profile(user_id):
         return redirect(url_for('index'))
 
     return render_template('profile.html', user=user_to_view)
+
+@app.route('/uploader', methods=['GET', 'POST'])
+@login_required
+def uploader():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part', 'error')
+            return redirect(request.url)
+        
+        file = request.files['file']
+        
+        if file.filename == '':
+            flash('No selected file', 'error')
+            return redirect(request.url)
+
+        # --- THE NEW VULNERABILITY LOGIC ---
+        
+        # 1. Check if the file is NOT allowed
+        if file and not allowed_file(file.filename):
+            # This is the HACK! The user uploaded a non-image file.
+            # We "return" the flag by flashing it.
+            
+            # First, we get the flag from our database
+            flag_obj = Flag.query.filter_by(challenge_name='Insecure File Upload').first()
+            if flag_obj:
+                flash(f'DANGER! Invalid file type. System breach detected! Flag: {flag_obj.flag_value}', 'success')
+            else:
+                flash('Vulnerability detected, but flag not found in DB.', 'error')
+            
+            return redirect(url_for('uploader'))
+        
+        # 2. This is the "normal" path (if they upload a real image)
+        if file and allowed_file(file.filename):
+            # We securely save it, but this is the "losing" path for the CTF.
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+            flash('That was a valid image! The uploader is working... this isn\'t the hack. Try again.', 'info')
+            return redirect(url_for('uploader'))
+
+    return render_template('uploader.html')
+
 
 # --- 7. Run the App ---
 if __name__ == '__main__':

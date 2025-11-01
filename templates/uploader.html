@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login</title>
+    <title>Profile Picture Uploader</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <a href="{{ url_for('index') }}"><< Back to Dashboard</a>
-        <h2>Challenge 2: Admin Portal Login</h2>
-        <p>Only the site admin can log in here. Think you can outwit the admin?</p>
-        
+        <h2>Challenge 5: Profile Picture Uploader</h2>
+        <p>This new feature lets you upload a profile picture. You can only upload <code>.jpg</code> or <code>.png</code> files...</p>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             <ul class=flashes>
@@ -21,25 +21,19 @@
           {% endif %}
         {% endwith %}
         
-        <form method="POST" action="/admin-login">
-            <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username">
-            </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
-            </div>
-            <button type="submit">Login</button>
+        <form method="POST" enctype="multipart/form-data">
+            <label for="file">Select file:</label>
+            <input type="file" id="file" name="file">
+            <button type="submit">Upload</button>
         </form>
-    </div>
-    <hr>
-    <div>
+
+        <hr>
         <button onclick="showHint()">Get Hint</button>
         <div id="hint-box" style="display:none; margin-top:10px; border: 1px dashed #00ffff; padding: 10px;">
-            <b>Hint:</b> The backend might be building the SQL query as a simple string. Maybe I can "break out" of the username field and add my own SQL command to grab some info from the DB.
+            <b>Hint:</b> This uploader is only supposed to accept <code>.jpg</code> or <code>.png</code> files. What happens if you try to upload a simple <code>.txt</code> file instead?
         </div>
     </div>
+
     <script>
         function showHint() {
             document.getElementById('hint-box').style.display = 'inline-block';

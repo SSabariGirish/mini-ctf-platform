@@ -43,9 +43,13 @@ def seed_database():
             flag_value='flag{r0b0ts_c4nt_k33p_s3cr3ts}',
             points=50
         )
-        db.session.add(misconfig_flag)
+        upload_flag = Flag(
+            challenge_name='Insecure File Upload',
+            flag_value='flag{f1le_upl0ad_pwned}',
+            points=250
+        )
 
-        db.session.add_all([xss_flag, sqli_flag, idor_flag,misconfig_flag])
+        db.session.add_all([xss_flag, sqli_flag, idor_flag,misconfig_flag,upload_flag])
         
         # --- 4. COMMIT ALL CHANGES ---
         try:

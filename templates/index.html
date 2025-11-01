@@ -53,7 +53,7 @@
             </li>
             
             <li class="challenge-item">
-                <a>Challenge 4: Server Recon (Easy) - <i>"Good robots follow the rules."</i></a>
+                <a>Challenge 4: Server Recon (Hard) - <i>"Good robots follow the rules."</i></a>
                 
                 <div class="hint-container">
                     <button onclick="showHint('recon-hint')">Get Hint</button>
@@ -61,6 +61,9 @@
                         <b>Hint:</b> Many websites have a file called <code>robots.txt</code> to give instructions to web crawlers. You should check it.
                     </div>
                 </div>
+            </li>
+            <li class="challenge-item">
+                <a href="{{ url_for('uploader') }}">Challenge 5: File Uploader (Easy)</a>
             </li>
         </ul>
     {% else %}
