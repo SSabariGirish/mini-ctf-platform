@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, send_from_directory, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -222,6 +222,25 @@ def admin_login():
 def admin_dashboard():
     # This page just shows the flag
     return render_template('admin_dashboard.html')
+
+@app.route('/robots.txt')
+def robots_txt():
+    """
+    This route simulates a misconfigured robots.txt file,
+    which is a common place for recon.
+    """
+    # This text will be served when the user visits /robots.txt
+    robots_content = """
+User-agent: *
+Disallow: /admin-login
+Disallow: /profile/
+
+# Note to dev: We really need to secure our backups.
+# Do not allow crawlers to index the /static/server_logs.bak file.
+# Disallow: /static/server_logs.bak
+"""
+    # We return it as plain text
+    return Response(robots_content, mimetype='text/plain')
 
 @app.route('/profile/<int:user_id>')
 @login_required

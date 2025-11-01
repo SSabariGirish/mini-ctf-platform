@@ -116,3 +116,19 @@ hr {
     border-top: 1px dashed rgba(0, 255, 255, 0.5);
     margin: 20px 0;
 }
+
+/* --- Challenge List --- */
+.challenge-item {
+    margin-bottom: 20px; /* Adds a nice space between each challenge */
+}
+.challenge-item > a {
+    margin-bottom: 10px; /* Adds space between the challenge text and its hint button */
+    display: inline-block; /* Allows margin-bottom to work */
+}
+
+/* This container holds the button and its hint */
+.hint-container {
+    text-align: left; /* Keeps the button on the right */
+    flex-shrink: 0; /* Prevents the button from shrinking or wrapping */
+    margin-left: 20px; /* Adds some space between the text and button */
+}

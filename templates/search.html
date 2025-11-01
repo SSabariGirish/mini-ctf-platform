@@ -18,6 +18,20 @@
     </form>
 
     <hr>
+    <div>
+        <button onclick="showHint()">Get Hint</button>
+        <div id="hint-box" style="display:none; margin-top:10px; border: 1px dashed #00ffff; padding: 10px;">
+            <b>Hint:</b> The server seems to *reflect* my search query back to the page. I wonder if it reflects *everything*, even HTML tags?
+        </div>
+    </div>
+    <hr>
+    <h3>Search Results</h3>
+    <script>
+        function showHint() {
+            document.getElementById('hint-box').style.display = 'inline-block';
+        }
+    </script>
+
     <h3>Search Results</h3>
     {% if search_query %}
         <p>

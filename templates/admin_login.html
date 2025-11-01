@@ -33,5 +33,17 @@
             <button type'="submit">Login</button>
         </form>
     </div>
+    <hr>
+    <div>
+        <button onclick="showHint()">Get Hint</button>
+        <div id="hint-box" style="display:none; margin-top:10px; border: 1px dashed #00ffff; padding: 10px;">
+            <b>Hint:</b> The backend might be building the SQL query as a simple string. Maybe I can "break out" of the username field and add my own SQL command to grab some info from the DB.
+        </div>
+    </div>
+    <script>
+        function showHint() {
+            document.getElementById('hint-box').style.display = 'inline-block';
+        }
+    </script>
 </body>
 </html>

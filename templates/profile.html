@@ -18,5 +18,17 @@
         <hr>
         <p><i>Hint: You are logged in as {{ current_user.username }} (ID: {{ current_user.id }}). Try viewing the profiles of other users... maybe one that doesn't exist?</i></p>
     </div>
+    <div>
+        <button onclick="showHint()">Get Hint</button>
+        <div id="hint-box" style="display:none; margin-top:10px; border: 1px dashed #00ffff; padding: 10px;">
+            <b>Hint:</b> You are user <code>{{ current_user.id }}</code>. What happens if you try to visit <code>/profile/1</code>? Or <code>/profile/0</code>?
+        </div>
+    </div>
+
+<script>
+    function showHint() {
+        document.getElementById('hint-box').style.display = 'inline-block';
+    }
+</script>
 </body>
 </html>

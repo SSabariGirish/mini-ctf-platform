@@ -39,19 +39,37 @@
     <h2>Challenges</h2>
     
     {% if current_user.is_authenticated %}
-    <ul>
-        <li>
-            <a href="{{ url_for('search') }}">Challenge 1: The "Search" Page (Easy)</a>
-        </li>
-        <li>
-            <a href="{{ url_for('admin_login') }}">Challenge 2: Admin Portal (Medium)</a>
-        </li>
-        <li>
-            <a href="{{ url_for('profile', user_id=current_user.id) }}">Challenge 3: Your Profile (Medium)</a>
-        </li>
-    </ul>
+        <ul>
+            <li class="challenge-item">
+                <a href="{{ url_for('search') }}">Challenge 1: The "Search" Page (Easy)</a>
+            </li>
+            
+            <li class="challenge-item">
+                <a href="{{ url_for('admin_login') }}">Challenge 2: Admin Portal (Medium)</a>
+            </li>
+            
+            <li class="challenge-item">
+                <a href="{{ url_for('profile', user_id=current_user.id) }}">Challenge 3: Your Profile (Medium)</a>
+            </li>
+            
+            <li class="challenge-item">
+                <a>Challenge 4: Server Recon (Easy) - <i>"Good robots follow the rules."</i></a>
+                
+                <div class="hint-container">
+                    <button onclick="showHint('recon-hint')">Get Hint</button>
+                    <div id="recon-hint" style="display:none; margin-top:10px; border: 1px dashed #00ffff; padding: 10px;">
+                        <b>Hint:</b> Many websites have a file called <code>robots.txt</code> to give instructions to web crawlers. You should check it.
+                    </div>
+                </div>
+            </li>
+        </ul>
     {% else %}
-    <p>Log in to see the challenges.</p>
+        <p>Log in to see the challenges.</p>
     {% endif %}
+    <script>
+        function showHint(id) {
+            document.getElementById(id).style.display = 'inline-block';
+        }
+    </script>
 </body>
 </html>

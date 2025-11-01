@@ -38,7 +38,14 @@ def seed_database():
             flag_value='flag{N0sy_N3ighb0ur}', # This is the flag they'll find
             points=200
         )
-        db.session.add_all([xss_flag, sqli_flag, idor_flag])
+        misconfig_flag = Flag(
+            challenge_name='Robots.txt Recon',
+            flag_value='flag{r0b0ts_c4nt_k33p_s3cr3ts}',
+            points=50
+        )
+        db.session.add(misconfig_flag)
+
+        db.session.add_all([xss_flag, sqli_flag, idor_flag,misconfig_flag])
         
         # --- 4. COMMIT ALL CHANGES ---
         try:
