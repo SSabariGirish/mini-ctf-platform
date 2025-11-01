@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, Admin!</h1>
+        <p>Access granted. Your system is secure.</p>
+        <hr>
+        <h3>Here is the flag you've been looking for:</h3>
+        <p><code>flag{SQLi_L0gin_Byp@ss}</code></p>
+        <hr>
+        <p>You can now submit this flag on the main dashboard.</p>
+        <a href="{{ url_for('index') }}"><< Back to Dashboard</a>
+    </div>
+</body>
+</html>

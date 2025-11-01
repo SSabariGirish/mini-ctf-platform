@@ -54,6 +54,10 @@ class SolvedChallenge(db.Model):
     # This ensures a user can only solve a flag once
     db.UniqueConstraint('user_id', 'flag_id')
 
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(128)) # Storing in plain text for the vulnerability!
 
 # This function is required by Flask-Login to load the current user from session
 @login_manager.user_loader
@@ -184,6 +188,40 @@ def search():
     
     return resp
 
+@app.route('/admin-login', methods=['GET', 'POST'])
+@login_required
+def admin_login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # --- THE VULNERABILITY ---
+        # This is a classic insecure query. It's building the SQL string
+        # by just pasting the user's input into it.
+        # A smart user can "break out" of the string.
+        
+        # DO NOT EVER DO THIS IN A REAL APP!
+        query = f"SELECT * FROM admin WHERE username = '{username}' AND password = '{password}'"
+        
+        # We execute the raw SQL query
+        result = db.session.execute(db.text(query)).first()
+        
+        if result:
+            # If the query returned a user, log them in!
+            # The SQLi bypass will make this 'result' not None.
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid admin credentials.', 'error')
+            return redirect(url_for('admin_login'))
+
+    return render_template('admin_login.html')
+
+
+@app.route('/admin-dashboard')
+@login_required # We still require a user to be logged in to the main app
+def admin_dashboard():
+    # This page just shows the flag
+    return render_template('admin_dashboard.html')
 
 # --- 7. Run the App ---
 if __name__ == '__main__':

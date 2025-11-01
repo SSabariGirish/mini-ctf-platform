@@ -42,9 +42,11 @@
     <ul>
         <li>
             <a href="{{ url_for('search') }}">Challenge 1: The "Search" Page (Easy)</a>
-
         </li>
-        </ul>
+        <li>
+            <a href="{{ url_for('admin_login') }}">Challenge 2: Admin Portal (Medium)</a>
+        </li>
+    </ul>
     {% else %}
     <p>Log in to see the challenges.</p>
     {% endif %}
