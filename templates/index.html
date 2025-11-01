@@ -46,6 +46,9 @@
         <li>
             <a href="{{ url_for('admin_login') }}">Challenge 2: Admin Portal (Medium)</a>
         </li>
+        <li>
+            <a href="{{ url_for('profile', user_id=current_user.id) }}">Challenge 3: Your Profile (Medium)</a>
+        </li>
     </ul>
     {% else %}
     <p>Log in to see the challenges.</p>

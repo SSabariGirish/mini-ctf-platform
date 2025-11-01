@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}"><< Back to Dashboard</a>
+        
+        <h2>Viewing Profile for: {{ user.username }}</h2>
+        
+        <hr>
+        <h3>Private Notes:</h3>
+        <p>This user has no private notes.</p>
+
+        <hr>
+        <p><i>Hint: You are logged in as {{ current_user.username }} (ID: {{ current_user.id }}). Try viewing the profiles of other users... maybe one that doesn't exist?</i></p>
+    </div>
+</body>
+</html>

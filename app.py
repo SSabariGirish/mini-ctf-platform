@@ -223,6 +223,26 @@ def admin_dashboard():
     # This page just shows the flag
     return render_template('admin_dashboard.html')
 
+@app.route('/profile/<int:user_id>')
+@login_required
+def profile(user_id):
+
+    # --- THE HACK ---
+    # We check for the special, "hidden" ID.
+    if user_id == 0:
+        # If they guess '0', send them to the secret page.
+        return render_template('profile_hidden.html')
+
+    # --- Normal Users ---
+    # If it's any other ID, just show their normal profile.
+    user_to_view = User.query.get(user_id)
+
+    if not user_to_view:
+        flash('User not found.', 'error')
+        return redirect(url_for('index'))
+
+    return render_template('profile.html', user=user_to_view)
+
 # --- 7. Run the App ---
 if __name__ == '__main__':
     app.run(debug=True)
