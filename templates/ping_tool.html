@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Network Ping Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}"><< Back to Dashboard</a>
+        <h2>Challenge 5: Network Ping Tool</h2>
+        <p>A simple utility to ping an IP address. It only runs <code>ping -n 3 [IP]</code>... what could go wrong?</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        
+        <form method="POST">
+            <label for="ip_address">IP to Ping:</label>
+            <input type="text" id="ip_address" name="ip_address" placeholder="8.8.8.8">
+            <button type="submit">Ping</button>
+        </form>
+
+        <hr>
+        <h3>Command Output:</h3>
+        <pre style="background-color: #000; padding: 10px; border: 1px solid #00ffff; min-height: 100px;">{{ command_output }}</pre>
+
+        <hr>
+        <button onclick="showHint()">Get Hint</button>
+        <div id="hint-box" style="display:none; margin-top:10px; border: 1px dashed #00ffff; padding: 10px;">
+            <b>Hint:</b> On Windows and Linux, you can chain commands together using <code>;</code> or <code>&&</code>. What if you ping <code>8.8.8.8 ; whoami</code>?
+        </div>
+    </div>
+
+    <script>
+        function showHint() {
+            document.getElementById('hint-box').style.display = 'inline-block';
+        }
+    </script>
+</body>
+</html>

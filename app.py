@@ -1,4 +1,5 @@
 import os
+import subprocess
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, send_from_directory, Response
 from flask_sqlalchemy import SQLAlchemy
@@ -276,6 +277,36 @@ def uploader():
 
     return render_template('uploader.html')
 
+@app.route('/ping', methods=['GET', 'POST'])
+@login_required
+def ping_tool():
+    output = ""
+
+    if request.method == 'POST':
+        ip_address = request.form.get('ip_address')
+
+        command = f"ping -n 3 {ip_address}" 
+
+        if ';' in ip_address or '&' in ip_address:
+            flag_obj = Flag.query.filter_by(challenge_name='OS Command Injection').first()
+            if flag_obj:
+                flash(f'Command Injection detected! Here is your reward: {flag_obj.flag_value}', 'success')
+            else:
+                flash('Vulnerability detected, but flag not found in DB.', 'error')
+
+        try:
+            result = subprocess.run(
+                command, 
+                shell=True, 
+                capture_output=True, 
+                text=True, 
+                timeout=10
+            )
+            output = result.stdout + result.stderr
+        except Exception as e:
+            output = f"An error occurred: {e}"
+
+    return render_template('ping_tool.html', command_output=output)
 
 # ----- 7. Run the App -----
 if __name__ == '__main__':
