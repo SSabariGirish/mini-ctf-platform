@@ -8,12 +8,11 @@ def seed_database():
     
     with app.app_context():
         
-        # --- 1. CLEAN UP OLD DATA ---
+
         print("Cleaning old challenge data...")
         db.session.query(Admin).delete()
         db.session.query(Flag).delete()
-        
-        # --- 2. ADD ADMIN USER (for SQLi Challenge) ---
+
         print("Creating Admin user...")
         admin_user = Admin(
             username='admin',
@@ -21,7 +20,6 @@ def seed_database():
         )
         db.session.add(admin_user)
 
-        # --- 3. ADD ALL FLAGS ---
         print("Adding flags to database...")
         xss_flag = Flag(
             challenge_name='Search Page XSS', 
@@ -35,7 +33,7 @@ def seed_database():
         )
         idor_flag = Flag(
             challenge_name='IDOR Profile Page',
-            flag_value='flag{N0sy_N3ighb0ur}', # This is the flag they'll find
+            flag_value='flag{N0sy_N3ighb0ur}', 
             points=200
         )
         misconfig_flag = Flag(
@@ -48,16 +46,20 @@ def seed_database():
             flag_value='flag{f1le_upl0ad_pwned}',
             points=250
         )
+        cmd_flag = Flag(
+            challenge_name='OS Command Injection',
+            flag_value='flag{sh3ll_c0mm4nd3r}',
+            points=300
+        )
 
-        db.session.add_all([xss_flag, sqli_flag, idor_flag,misconfig_flag,upload_flag])
+        db.session.add_all([xss_flag, sqli_flag, idor_flag,misconfig_flag,upload_flag,cmd_flag])
         
-        # --- 4. COMMIT ALL CHANGES ---
         try:
             db.session.commit()
-            print("\n✅ Database seeding complete!")
+            print("\nDatabase seeding complete!")
         except Exception as e:
             db.session.rollback()
-            print(f"\n❌ Error seeding database: {e}")
+            print(f"\nError seeding database: {e}")
 
 if __name__ == '__main__':
     seed_database()
