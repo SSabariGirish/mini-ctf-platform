@@ -181,7 +181,7 @@ def leaderboard():
     2. Time of last solve (Earliest first)
     """
     
-    # This query does all the magic!
+    
     users = User.query.order_by(
         User.score.desc(), 
         User.last_solve_time.asc()
