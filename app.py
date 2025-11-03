@@ -1,5 +1,6 @@
 import os
 import subprocess
+from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, send_from_directory, Response
 from flask_sqlalchemy import SQLAlchemy
@@ -41,6 +42,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     score = db.Column(db.Integer, default=0)
+    last_solve_time = db.Column(db.DateTime, nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -153,9 +155,9 @@ def submit_flag():
         flash('You have already solved this challenge!', 'info')
         return redirect(url_for('index'))
 
-    # 5. ----- SUCCESS! -----
     current_user.score += correct_flag.points
-    
+    current_user.last_solve_time = datetime.utcnow()
+
     new_solve = SolvedChallenge(user_id=current_user.id, flag_id=correct_flag.id)
     db.session.add(new_solve)
     
@@ -171,6 +173,21 @@ def index():
     
     return render_template('index.html')
 
+@app.route('/leaderboard')
+def leaderboard():
+    """
+    Displays all users, sorted by:
+    1. Score (Highest first)
+    2. Time of last solve (Earliest first)
+    """
+    
+    # This query does all the magic!
+    users = User.query.order_by(
+        User.score.desc(), 
+        User.last_solve_time.asc()
+    ).all()
+    
+    return render_template('leaderboard.html', users=users)
 
 # ----- 6. CTF Challenge Routes -----
 @app.route('/search')
