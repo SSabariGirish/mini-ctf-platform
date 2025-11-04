@@ -1,12 +1,9 @@
 from app import app, db, User, Admin, Flag
 
 def seed_database():
-    """
-    Clears and seeds the database with all
-    challenge flags and the admin user.
-    """
-    
+       
     with app.app_context():
+        db.create_all()
         
 
         print("Cleaning old challenge data...")

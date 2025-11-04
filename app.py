@@ -18,7 +18,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a_default_fallback_key')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ctf.db')
+db_url = os.environ.get('DATABASE_URL')
+if db_url:
+    db_url = db_url.replace("postgres://", "postgresql://")
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ctf.db')
+
 app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static', 'uploads')
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
